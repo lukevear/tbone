@@ -98,6 +98,22 @@ class RouterTest extends PHPUnit_Framework_TestCase
         $this->router->put('/bad-put', null);
     }
 
+    public function testAddingPatch()
+    {
+        $this->assertTrue($this->router->patch('/', function() {
+            return true;
+        }), 'Failed to add the route: PATCH /');
+    }
+
+    /**
+     * @expectedException TBone\TBoneException
+     * @expectedExceptionMessage The callback that was provided is not callable.
+     */
+    public function testAddingInvalidPatch()
+    {
+        $this->router->patch('/bad-patch', null);
+    }
+
     public function testAddingDelete()
     {
         $this->assertTrue($this->router->delete('/', function() {
