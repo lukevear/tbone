@@ -1,13 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <phpunit bootstrap="./tests/bootstrap.php">
     <testsuites>
-        <testsuite name="Name of the test suite">
+        <testsuite name="TBone Router Tests">
             <directory>./tests</directory>
         </testsuite>
     </testsuites>
-    <php>
-        <const name="WEB_SERVER_HOST" value="localhost" />
-        <const name="WEB_SERVER_PORT" value="8002" />
-        <const name="WEB_SERVER_INDEX" value="./tests/public/index.php" />
-    </php>
 </phpunit>

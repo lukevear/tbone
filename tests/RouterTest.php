@@ -1,117 +1,199 @@
 <?php
 
-use GuzzleHttp\Client;
 use TBone\TBone;
 use TBone\TBoneEvent;
 
 class RouterTest extends PHPUnit_Framework_TestCase
 {
-    private function getClient()
+    protected $router;
+
+    protected function setUp()
     {
-        /** @noinspection PhpUndefinedConstantInspection */
-        return new Client([
-            'base_uri' => 'http://' . WEB_SERVER_HOST . ':' . WEB_SERVER_PORT . '/',
-            'exceptions' => false,
-        ]);
+        $this->router = new TBone;
     }
 
-    public function testServer()
+    protected function tearDown()
     {
-        $response = $this->getClient()->request('GET', '/');
-        $this->assertEquals(200, $response->getStatusCode());
+        $_SERVER['REQUEST_METHOD'] = null;
+        $_SERVER['REQUEST_URI'] = null;
     }
 
-    public function testGet()
+    public function testAddingGet()
     {
-        $response = $this->getClient()->request('GET', '/');
-        $this->assertEquals(200, $response->getStatusCode());
-
-        $this->assertJsonStringEqualsJsonString(
-            json_encode(['route' => '/']), $response->getBody()->__toString()
-        );
-
-        $response = $this->getClient()->request('GET', '/get');
-        $this->assertEquals(200, $response->getStatusCode());
-
-        $this->assertJsonStringEqualsJsonString(
-            json_encode(['route' => '/get']), $response->getBody()->__toString()
-        );
+        $this->assertTrue($this->router->get('/', function() {
+            return true;
+        }), 'Failed to add the route: GET /');
     }
 
     /**
      * @expectedException TBone\TBoneException
      * @expectedExceptionMessage The callback that was provided is not callable.
      */
-    public function testInvalidArgumentsForGet() {
-        $router = new TBone;
-        $router->get('/', null);
+    public function testAddingInvalidGet()
+    {
+        $this->router->get('/bad-get', null);
     }
 
-    public function testPost()
+    public function testAddingPost()
     {
-        $response = $this->getClient()->request('POST', '/post');
-        $this->assertEquals(200, $response->getStatusCode());
-
-        $this->assertJsonStringEqualsJsonString(
-            json_encode(['route' => '/post']), $response->getBody()->__toString()
-        );
+        $this->assertTrue($this->router->post('/', function() {
+            return true;
+        }), 'Failed to add the route: POST /');
     }
 
     /**
      * @expectedException TBone\TBoneException
      * @expectedExceptionMessage The callback that was provided is not callable.
      */
-    public function testInvalidArgumentsForPost() {
-        $router = new TBone;
-        $router->post('/', null);
+    public function testAddingInvalidPost()
+    {
+        $this->router->post('/bad-post', null);
     }
 
-    public function testPut()
+    public function testAddingPut()
     {
-        $response = $this->getClient()->request('PUT', '/put');
-        $this->assertEquals(200, $response->getStatusCode());
-
-        $this->assertJsonStringEqualsJsonString(
-            json_encode(['route' => '/put']), $response->getBody()->__toString()
-        );
+        $this->assertTrue($this->router->put('/', function() {
+            return true;
+        }), 'Failed to add the route: PUT /');
     }
 
     /**
      * @expectedException TBone\TBoneException
      * @expectedExceptionMessage The callback that was provided is not callable.
      */
-    public function testInvalidArgumentsForPut() {
-        $router = new TBone;
-        $router->put('/', null);
+    public function testAddingInvalidPut()
+    {
+        $this->router->put('/bad-put', null);
     }
 
-    public function testDelete()
+    public function testAddingDelete()
     {
-        $response = $this->getClient()->request('DELETE', '/delete');
-        $this->assertEquals(200, $response->getStatusCode());
-
-        $this->assertJsonStringEqualsJsonString(
-            json_encode(['route' => '/delete']), $response->getBody()->__toString()
-        );
+        $this->assertTrue($this->router->delete('/', function() {
+            return true;
+        }), 'Failed to add the route: DELETE /');
     }
 
     /**
      * @expectedException TBone\TBoneException
      * @expectedExceptionMessage The callback that was provided is not callable.
      */
-    public function testInvalidArgumentsForDelete() {
-        $router = new TBone;
-        $router->delete('/', null);
+    public function testAddingInvalidDelete()
+    {
+        $this->router->delete('/bad-delete', null);
     }
 
-    public function testNotFound()
+    public function testAddingErrorHandler()
     {
-        $response = $this->getClient()->request('GET', '/doesnotexist');
-        $this->assertEquals(404, $response->getStatusCode());
+        $this->assertTrue($this->router->addHandler(TBoneEvent::ROUTE_NOT_FOUND, function() {
+            return false;
+        }), 'Failed to add an error handler.');
+    }
 
-        $this->assertJsonStringEqualsJsonString(
-            json_encode(['error' => TBoneEvent::ROUTE_NOT_FOUND]), $response->getBody()->__toString()
-        );
+    /**
+     * @expectedException TBone\TBoneException
+     * @expectedExceptionMessage The handler provided is not callable.
+     */
+    public function testAddingInvalidHandler()
+    {
+        $this->router->addHandler(TBoneEvent::ROUTE_NOT_FOUND, null);
+    }
+
+    public function testCallingGet()
+    {
+        $called = false;
+        $this->router->get('/', function() use (&$called) {
+            $called = true;
+            return $called;
+        });
+
+        $_SERVER['REQUEST_METHOD'] = 'GET';
+        $_SERVER['REQUEST_URI'] = '/';
+        $this->router->route();
+        $this->assertTrue($called);
+    }
+
+    public function testRouteMatching()
+    {
+        $firstCalled = false;
+        $this->router->get('/', function() use (&$firstCalled) {
+            $firstCalled = true;
+            return $firstCalled;
+        });
+
+        $secondCalled = false;
+        $this->router->get('/call-me', function() use (&$secondCalled) {
+            $secondCalled = true;
+            return $secondCalled;
+        });
+
+        $_SERVER['REQUEST_METHOD'] = 'GET';
+        $_SERVER['REQUEST_URI'] = '/call-me';
+        $this->router->route();
+        $this->assertFalse($firstCalled);
+        $this->assertTrue($secondCalled);
+    }
+
+    public function testComplexRouteMatching()
+    {
+        $firstCalled = false;
+        $this->router->get('/', function() use (&$firstCalled) {
+            $firstCalled = true;
+            return $firstCalled;
+        });
+
+        $secondCalled = false;
+        $this->router->post('/call-me-post', function() use (&$secondCalled) {
+            $secondCalled = true;
+            return $secondCalled;
+        });
+
+        $thirdCalled = false;
+        $this->router->get('/do-not-call-me-get', function() use (&$thirdCalled) {
+            $thirdCalled = true;
+            return $thirdCalled;
+        });
+
+        $_SERVER['REQUEST_METHOD'] = 'POST';
+        $_SERVER['REQUEST_URI'] = '/call-me-post';
+        $this->router->route();
+        $this->assertFalse($firstCalled);
+        $this->assertTrue($secondCalled);
+        $this->assertFalse($thirdCalled);
+    }
+
+    public function testComplexRouteMatchingWith404Page()
+    {
+        $firstCalled = false;
+        $this->router->get('/', function() use (&$firstCalled) {
+            $firstCalled = true;
+            return $firstCalled;
+        });
+
+        $secondCalled = false;
+        $this->router->post('/call-me-post', function() use (&$secondCalled) {
+            $secondCalled = true;
+            return $secondCalled;
+        });
+
+        $thirdCalled = false;
+        $this->router->get('/do-not-call-me-get', function() use (&$thirdCalled) {
+            $thirdCalled = true;
+            return $thirdCalled;
+        });
+
+        $fourthCalled = false;
+        $this->router->addHandler(TBoneEvent::ROUTE_NOT_FOUND, function() use (&$fourthCalled) {
+            $fourthCalled = true;
+            return $fourthCalled;
+        });
+
+        $_SERVER['REQUEST_METHOD'] = 'PUT';
+        $_SERVER['REQUEST_URI'] = '/does-not-exist';
+        $this->router->route();
+        $this->assertFalse($firstCalled);
+        $this->assertFalse($secondCalled);
+        $this->assertFalse($thirdCalled);
+        $this->assertTrue($fourthCalled);
     }
 
 }

@@ -26,6 +26,7 @@ class TBone {
      *
      * @param $route string The URL to match
      * @param $callback callable The callback to run
+     * @return bool
      * @throws TBoneException
      */
     public function get($route, $callback) {
@@ -34,6 +35,7 @@ class TBone {
         }
 
         $this->routes['get'][$route] = $callback;
+        return true;
     }
 
     /**
@@ -41,6 +43,7 @@ class TBone {
      *
      * @param $route string The URL to match
      * @param $callback callable The callback to run
+     * @return bool
      * @throws TBoneException
      */
     public function post($route, $callback) {
@@ -49,6 +52,7 @@ class TBone {
         }
 
         $this->routes['post'][$route] = $callback;
+        return true;
     }
 
     /**
@@ -56,6 +60,7 @@ class TBone {
      *
      * @param $route string The URL to match
      * @param $callback callable The callback to run
+     * @return bool
      * @throws TBoneException
      */
     public function put($route, $callback) {
@@ -64,6 +69,7 @@ class TBone {
         }
 
         $this->routes['put'][$route] = $callback;
+        return true;
     }
 
     /**
@@ -71,6 +77,7 @@ class TBone {
      *
      * @param $route string The URL to match
      * @param $callback callable The callback to run
+     * @return bool
      * @throws TBoneException
      */
     public function delete($route, $callback) {
@@ -79,6 +86,7 @@ class TBone {
         }
 
         $this->routes['delete'][$route] = $callback;
+        return true;
     }
 
     /**
@@ -86,6 +94,7 @@ class TBone {
      *
      * @param $event
      * @param $handler
+     * @return bool
      * @throws TBoneException
      */
     public function addHandler($event, $handler) {
@@ -97,6 +106,8 @@ class TBone {
             'event' => $event,
             'handler' => $handler,
         ];
+
+        return true;
     }
 
     /**
