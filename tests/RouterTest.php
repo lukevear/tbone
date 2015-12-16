@@ -18,6 +18,38 @@ class RouterTest extends PHPUnit_Framework_TestCase
         $_SERVER['REQUEST_URI'] = null;
     }
 
+    public function testAddingOptions()
+    {
+        $this->assertTrue($this->router->options('/', function() {
+            return true;
+        }), 'Failed to add the route: OPTIONS /');
+    }
+
+    /**
+     * @expectedException TBone\TBoneException
+     * @expectedExceptionMessage The callback that was provided is not callable.
+     */
+    public function testAddingInvalidOptions()
+    {
+        $this->router->options('/bad-options', null);
+    }
+
+    public function testAddingHead()
+    {
+        $this->assertTrue($this->router->head('/', function() {
+            return true;
+        }), 'Failed to add the route: HEAD /');
+    }
+
+    /**
+     * @expectedException TBone\TBoneException
+     * @expectedExceptionMessage The callback that was provided is not callable.
+     */
+    public function testAddingInvalidHead()
+    {
+        $this->router->head('/bad-head', null);
+    }
+
     public function testAddingGet()
     {
         $this->assertTrue($this->router->get('/', function() {
@@ -98,6 +130,34 @@ class RouterTest extends PHPUnit_Framework_TestCase
         $this->router->addHandler(TBoneEvent::ROUTE_NOT_FOUND, null);
     }
 
+    public function testCallingOptions()
+    {
+        $called = false;
+        $this->router->options('/', function() use (&$called) {
+            $called = true;
+            return $called;
+        });
+
+        $_SERVER['REQUEST_METHOD'] = 'OPTIONS';
+        $_SERVER['REQUEST_URI'] = '/';
+        $this->router->route();
+        $this->assertTrue($called);
+    }
+
+    public function testCallingHead()
+    {
+        $called = false;
+        $this->router->head('/', function() use (&$called) {
+            $called = true;
+            return $called;
+        });
+
+        $_SERVER['REQUEST_METHOD'] = 'HEAD';
+        $_SERVER['REQUEST_URI'] = '/';
+        $this->router->route();
+        $this->assertTrue($called);
+    }
+
     public function testCallingGet()
     {
         $called = false;
@@ -107,6 +167,62 @@ class RouterTest extends PHPUnit_Framework_TestCase
         });
 
         $_SERVER['REQUEST_METHOD'] = 'GET';
+        $_SERVER['REQUEST_URI'] = '/';
+        $this->router->route();
+        $this->assertTrue($called);
+    }
+
+    public function testCallingPost()
+    {
+        $called = false;
+        $this->router->post('/', function() use (&$called) {
+            $called = true;
+            return $called;
+        });
+
+        $_SERVER['REQUEST_METHOD'] = 'POST';
+        $_SERVER['REQUEST_URI'] = '/';
+        $this->router->route();
+        $this->assertTrue($called);
+    }
+
+    public function testCallingPut()
+    {
+        $called = false;
+        $this->router->put('/', function() use (&$called) {
+            $called = true;
+            return $called;
+        });
+
+        $_SERVER['REQUEST_METHOD'] = 'PUT';
+        $_SERVER['REQUEST_URI'] = '/';
+        $this->router->route();
+        $this->assertTrue($called);
+    }
+
+    public function testCallingPatch()
+    {
+        $called = false;
+        $this->router->patch('/', function() use (&$called) {
+            $called = true;
+            return $called;
+        });
+
+        $_SERVER['REQUEST_METHOD'] = 'PATCH';
+        $_SERVER['REQUEST_URI'] = '/';
+        $this->router->route();
+        $this->assertTrue($called);
+    }
+
+    public function testCallingDelete()
+    {
+        $called = false;
+        $this->router->delete('/', function() use (&$called) {
+            $called = true;
+            return $called;
+        });
+
+        $_SERVER['REQUEST_METHOD'] = 'DELETE';
         $_SERVER['REQUEST_URI'] = '/';
         $this->router->route();
         $this->assertTrue($called);

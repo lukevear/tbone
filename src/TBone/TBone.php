@@ -8,9 +8,12 @@ class TBone {
      * @var array
      */
     private $routes = [
+        'options' => [],
+        'head' => [],
         'get'=> [],
         'post'=> [],
         'put'=> [],
+        'patch' => [],
         'delete'=> [],
     ];
 
@@ -20,6 +23,40 @@ class TBone {
      * @var array
      */
     private $eventHandlers = [];
+
+    /**
+     * Add a route that can respond to a OPTIONS request
+     *
+     * @param $route string The URL to match
+     * @param $callback callable The callback to run
+     * @return bool
+     * @throws TBoneException
+     */
+    public function options($route, $callback) {
+        if (!is_callable($callback)) {
+            throw new TBoneException('The callback that was provided is not callable.');
+        }
+
+        $this->routes['options'][$route] = $callback;
+        return true;
+    }
+
+    /**
+     * Add a route that can respond to a HEAD request
+     *
+     * @param $route string The URL to match
+     * @param $callback callable The callback to run
+     * @return bool
+     * @throws TBoneException
+     */
+    public function head($route, $callback) {
+        if (!is_callable($callback)) {
+            throw new TBoneException('The callback that was provided is not callable.');
+        }
+
+        $this->routes['head'][$route] = $callback;
+        return true;
+    }
 
     /**
      * Add a route that can respond to a GET request
@@ -69,6 +106,23 @@ class TBone {
         }
 
         $this->routes['put'][$route] = $callback;
+        return true;
+    }
+
+    /**
+     * Add a route that can respond to a PATCH request
+     *
+     * @param $route string The URL to match
+     * @param $callback callable The callback to run
+     * @return bool
+     * @throws TBoneException
+     */
+    public function patch($route, $callback) {
+        if (!is_callable($callback)) {
+            throw new TBoneException('The callback that was provided is not callable.');
+        }
+
+        $this->routes['patch'][$route] = $callback;
         return true;
     }
 
