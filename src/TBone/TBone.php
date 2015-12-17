@@ -8,13 +8,13 @@ class TBone {
      * @var array
      */
     private $routes = [
-        'options' => [],
-        'head' => [],
-        'get'=> [],
-        'post'=> [],
-        'put'=> [],
-        'patch' => [],
-        'delete'=> [],
+        'OPTIONS'   => [],
+        'HEAD'      => [],
+        'GET'       => [],
+        'POST'      => [],
+        'PUT'       => [],
+        'PATCH'     => [],
+        'DELETE'    => [],
     ];
 
     /**
@@ -37,7 +37,7 @@ class TBone {
             throw new TBoneException('The callback that was provided is not callable.');
         }
 
-        $this->routes['options'][$route] = $callback;
+        $this->routes['OPTIONS'][$route] = $callback;
         return true;
     }
 
@@ -54,7 +54,7 @@ class TBone {
             throw new TBoneException('The callback that was provided is not callable.');
         }
 
-        $this->routes['head'][$route] = $callback;
+        $this->routes['HEAD'][$route] = $callback;
         return true;
     }
 
@@ -71,7 +71,7 @@ class TBone {
             throw new TBoneException('The callback that was provided is not callable.');
         }
 
-        $this->routes['get'][$route] = $callback;
+        $this->routes['GET'][$route] = $callback;
         return true;
     }
 
@@ -88,7 +88,7 @@ class TBone {
             throw new TBoneException('The callback that was provided is not callable.');
         }
 
-        $this->routes['post'][$route] = $callback;
+        $this->routes['POST'][$route] = $callback;
         return true;
     }
 
@@ -105,7 +105,7 @@ class TBone {
             throw new TBoneException('The callback that was provided is not callable.');
         }
 
-        $this->routes['put'][$route] = $callback;
+        $this->routes['PUT'][$route] = $callback;
         return true;
     }
 
@@ -122,7 +122,7 @@ class TBone {
             throw new TBoneException('The callback that was provided is not callable.');
         }
 
-        $this->routes['patch'][$route] = $callback;
+        $this->routes['PATCH'][$route] = $callback;
         return true;
     }
 
@@ -139,7 +139,7 @@ class TBone {
             throw new TBoneException('The callback that was provided is not callable.');
         }
 
-        $this->routes['delete'][$route] = $callback;
+        $this->routes['DELETE'][$route] = $callback;
         return true;
     }
 
@@ -183,13 +183,11 @@ class TBone {
      */
     public function route()
     {
-        $method = strtolower($_SERVER['REQUEST_METHOD']);
-
-        if (!in_array($_SERVER['REQUEST_URI'], array_keys($this->routes[$method]))) {
+        if (!isset($this->routes[$_SERVER['REQUEST_METHOD']][$_SERVER['REQUEST_URI']])) {
             $this->fireEvent(TBoneEvent::ROUTE_NOT_FOUND);
             return;
         }
 
-        call_user_func($this->routes[$method][$_SERVER['REQUEST_URI']]);
+        call_user_func($this->routes[$_SERVER['REQUEST_METHOD']][$_SERVER['REQUEST_URI']]);
     }
 }
