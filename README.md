@@ -13,7 +13,7 @@
  * Supports OPTIONS, HEAD, GET, POST, PUT, PATCH and DELETE requests
  * Simple event system for error handling
 
-> Note: By design, TBone does not support dynamic URLs such as /customers/{id}
+> Note: Currently (and likely forever) TBone does not support route parameters (such as /customers/{id})
 
 ### Easy Installation with Composer
 
