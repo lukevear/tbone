@@ -183,11 +183,11 @@ class TBone {
      */
     public function route()
     {
-        if (!isset($this->routes[$_SERVER['REQUEST_METHOD']][$_SERVER['REQUEST_URI']])) {
+        if (!isset($this->routes[$_SERVER['REQUEST_METHOD']][strtok($_SERVER['REQUEST_URI'], '?')])) {
             $this->fireEvent(TBoneEvent::ROUTE_NOT_FOUND);
             return;
         }
 
-        call_user_func($this->routes[$_SERVER['REQUEST_METHOD']][$_SERVER['REQUEST_URI']]);
+        call_user_func($this->routes[$_SERVER['REQUEST_METHOD']][strtok($_SERVER['REQUEST_URI'], '?')]);
     }
 }
