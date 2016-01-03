@@ -1,8 +1,9 @@
-<?php namespace TBone;
+<?php
+
+namespace TBone;
 
 use Exception;
 
 class TBoneException extends Exception
 {
-
 }

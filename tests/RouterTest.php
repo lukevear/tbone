@@ -9,7 +9,7 @@ class RouterTest extends PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->router = new TBone;
+        $this->router = new TBone();
     }
 
     protected function tearDown()
@@ -20,7 +20,7 @@ class RouterTest extends PHPUnit_Framework_TestCase
 
     public function testAddingOptions()
     {
-        $this->assertTrue($this->router->options('/', function() {
+        $this->assertTrue($this->router->options('/', function () {
             return true;
         }), 'Failed to add the route: OPTIONS /');
     }
@@ -36,7 +36,7 @@ class RouterTest extends PHPUnit_Framework_TestCase
 
     public function testAddingHead()
     {
-        $this->assertTrue($this->router->head('/', function() {
+        $this->assertTrue($this->router->head('/', function () {
             return true;
         }), 'Failed to add the route: HEAD /');
     }
@@ -52,7 +52,7 @@ class RouterTest extends PHPUnit_Framework_TestCase
 
     public function testAddingGet()
     {
-        $this->assertTrue($this->router->get('/', function() {
+        $this->assertTrue($this->router->get('/', function () {
             return true;
         }), 'Failed to add the route: GET /');
     }
@@ -68,7 +68,7 @@ class RouterTest extends PHPUnit_Framework_TestCase
 
     public function testAddingPost()
     {
-        $this->assertTrue($this->router->post('/', function() {
+        $this->assertTrue($this->router->post('/', function () {
             return true;
         }), 'Failed to add the route: POST /');
     }
@@ -84,7 +84,7 @@ class RouterTest extends PHPUnit_Framework_TestCase
 
     public function testAddingPut()
     {
-        $this->assertTrue($this->router->put('/', function() {
+        $this->assertTrue($this->router->put('/', function () {
             return true;
         }), 'Failed to add the route: PUT /');
     }
@@ -100,7 +100,7 @@ class RouterTest extends PHPUnit_Framework_TestCase
 
     public function testAddingPatch()
     {
-        $this->assertTrue($this->router->patch('/', function() {
+        $this->assertTrue($this->router->patch('/', function () {
             return true;
         }), 'Failed to add the route: PATCH /');
     }
@@ -116,7 +116,7 @@ class RouterTest extends PHPUnit_Framework_TestCase
 
     public function testAddingDelete()
     {
-        $this->assertTrue($this->router->delete('/', function() {
+        $this->assertTrue($this->router->delete('/', function () {
             return true;
         }), 'Failed to add the route: DELETE /');
     }
@@ -132,7 +132,7 @@ class RouterTest extends PHPUnit_Framework_TestCase
 
     public function testAddingErrorHandler()
     {
-        $this->assertTrue($this->router->addHandler(TBoneEvent::ROUTE_NOT_FOUND, function() {
+        $this->assertTrue($this->router->addHandler(TBoneEvent::ROUTE_NOT_FOUND, function () {
             return false;
         }), 'Failed to add an error handler.');
     }
@@ -149,8 +149,9 @@ class RouterTest extends PHPUnit_Framework_TestCase
     public function testCallingOptions()
     {
         $called = false;
-        $this->router->options('/', function() use (&$called) {
+        $this->router->options('/', function () use (&$called) {
             $called = true;
+
             return $called;
         });
 
@@ -163,8 +164,9 @@ class RouterTest extends PHPUnit_Framework_TestCase
     public function testCallingHead()
     {
         $called = false;
-        $this->router->head('/', function() use (&$called) {
+        $this->router->head('/', function () use (&$called) {
             $called = true;
+
             return $called;
         });
 
@@ -177,8 +179,9 @@ class RouterTest extends PHPUnit_Framework_TestCase
     public function testCallingGet()
     {
         $called = false;
-        $this->router->get('/', function() use (&$called) {
+        $this->router->get('/', function () use (&$called) {
             $called = true;
+
             return $called;
         });
 
@@ -191,8 +194,9 @@ class RouterTest extends PHPUnit_Framework_TestCase
     public function testCallingPost()
     {
         $called = false;
-        $this->router->post('/', function() use (&$called) {
+        $this->router->post('/', function () use (&$called) {
             $called = true;
+
             return $called;
         });
 
@@ -205,8 +209,9 @@ class RouterTest extends PHPUnit_Framework_TestCase
     public function testCallingPut()
     {
         $called = false;
-        $this->router->put('/', function() use (&$called) {
+        $this->router->put('/', function () use (&$called) {
             $called = true;
+
             return $called;
         });
 
@@ -219,8 +224,9 @@ class RouterTest extends PHPUnit_Framework_TestCase
     public function testCallingPatch()
     {
         $called = false;
-        $this->router->patch('/', function() use (&$called) {
+        $this->router->patch('/', function () use (&$called) {
             $called = true;
+
             return $called;
         });
 
@@ -233,8 +239,9 @@ class RouterTest extends PHPUnit_Framework_TestCase
     public function testCallingDelete()
     {
         $called = false;
-        $this->router->delete('/', function() use (&$called) {
+        $this->router->delete('/', function () use (&$called) {
             $called = true;
+
             return $called;
         });
 
@@ -247,14 +254,16 @@ class RouterTest extends PHPUnit_Framework_TestCase
     public function testRouteMatching()
     {
         $firstCalled = false;
-        $this->router->get('/', function() use (&$firstCalled) {
+        $this->router->get('/', function () use (&$firstCalled) {
             $firstCalled = true;
+
             return $firstCalled;
         });
 
         $secondCalled = false;
-        $this->router->get('/call-me', function() use (&$secondCalled) {
+        $this->router->get('/call-me', function () use (&$secondCalled) {
             $secondCalled = true;
+
             return $secondCalled;
         });
 
@@ -268,20 +277,23 @@ class RouterTest extends PHPUnit_Framework_TestCase
     public function testComplexRouteMatching()
     {
         $firstCalled = false;
-        $this->router->get('/', function() use (&$firstCalled) {
+        $this->router->get('/', function () use (&$firstCalled) {
             $firstCalled = true;
+
             return $firstCalled;
         });
 
         $secondCalled = false;
-        $this->router->post('/call-me-post', function() use (&$secondCalled) {
+        $this->router->post('/call-me-post', function () use (&$secondCalled) {
             $secondCalled = true;
+
             return $secondCalled;
         });
 
         $thirdCalled = false;
-        $this->router->get('/do-not-call-me-get', function() use (&$thirdCalled) {
+        $this->router->get('/do-not-call-me-get', function () use (&$thirdCalled) {
             $thirdCalled = true;
+
             return $thirdCalled;
         });
 
@@ -296,26 +308,30 @@ class RouterTest extends PHPUnit_Framework_TestCase
     public function testComplexRouteMatchingWith404Page()
     {
         $firstCalled = false;
-        $this->router->get('/', function() use (&$firstCalled) {
+        $this->router->get('/', function () use (&$firstCalled) {
             $firstCalled = true;
+
             return $firstCalled;
         });
 
         $secondCalled = false;
-        $this->router->post('/call-me-post', function() use (&$secondCalled) {
+        $this->router->post('/call-me-post', function () use (&$secondCalled) {
             $secondCalled = true;
+
             return $secondCalled;
         });
 
         $thirdCalled = false;
-        $this->router->get('/do-not-call-me-get', function() use (&$thirdCalled) {
+        $this->router->get('/do-not-call-me-get', function () use (&$thirdCalled) {
             $thirdCalled = true;
+
             return $thirdCalled;
         });
 
         $fourthCalled = false;
-        $this->router->addHandler(TBoneEvent::ROUTE_NOT_FOUND, function() use (&$fourthCalled) {
+        $this->router->addHandler(TBoneEvent::ROUTE_NOT_FOUND, function () use (&$fourthCalled) {
             $fourthCalled = true;
+
             return $fourthCalled;
         });
 
@@ -327,5 +343,4 @@ class RouterTest extends PHPUnit_Framework_TestCase
         $this->assertFalse($thirdCalled);
         $this->assertTrue($fourthCalled);
     }
-
 }
