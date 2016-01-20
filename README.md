@@ -13,7 +13,7 @@
  * Supports OPTIONS, HEAD, GET, POST, PUT, PATCH and DELETE requests
  * Simple event system for error handling
 
-> Note: Currently (and likely forever) TBone does not support route parameters (such as /customers/{id})
+> Note: TBone does not support route parameters (such as /customers/{id})
 
 ### Easy Installation with Composer
 
@@ -44,13 +44,11 @@ $router = new TBone;
 // Add a GET route
 $router->get('/', function() {
     echo 'Welcome to my homepage';
-    exit;
 });
 
 // Add a POST route
 $router->post('/contact-us', function() {
     echo 'Thanks for your submission';
-    exit;
 });
 
 // Run the router
@@ -58,7 +56,9 @@ $router->route();
 ~~~
 
 ### Event System
-TBone's event system exists to provide a mechanism for you to handle routing related errors. Currently the only supported event is `ROUTE_NOT_FOUND` (i.e. a 404). When an event is fired the specified callback will be run.
+TBone's event system exists to provide a mechanism for you to handle routing related events. TBone supports `ROUTE_DISPATCH_REQUESTED` (fired when dispatch() is called), `ROUTE_NOT_FOUND` (fired when a route cannot be matched) and `ROUTE_DISPATCHED` (fired when a route is matched and the callback has been run).
+
+When an event is fired the specified callback will be run.
 
 ~~~PHP
 use TBone\TBone;
@@ -69,16 +69,14 @@ $router = new TBone;
 // Add a GET route
 $router->get('/', function() {
     echo 'Welcome to my homepage';
-    exit;
 });
 
 // Register our 404 page
 $router->addHandler(TBoneEvent::ROUTE_NOT_FOUND, function() {
     http_response_code(404);
     echo 'Sorry, that page doesn't exist!);
-    exit;
 })
 
 // Run the router
-$router->route();
+$router->dispatch();
 ~~~

@@ -214,14 +214,19 @@ class TBone
     /**
      * Run the router.
      */
-    public function route()
+    public function dispatch()
     {
+        // Let the world know that we're dispatching
+        $this->fireEvent(TBoneEvent::ROUTE_DISPATCH_REQUESTED);
+
         if (!isset($this->routes[$_SERVER['REQUEST_METHOD']][strtok($_SERVER['REQUEST_URI'], '?')])) {
             $this->fireEvent(TBoneEvent::ROUTE_NOT_FOUND);
-
             return;
         }
 
         call_user_func($this->routes[$_SERVER['REQUEST_METHOD']][strtok($_SERVER['REQUEST_URI'], '?')]);
+
+        // Let the world know that we're finished
+        $this->fireEvent(TBoneEvent::ROUTE_DISPATCHED);
     }
 }

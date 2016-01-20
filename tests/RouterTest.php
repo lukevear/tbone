@@ -157,7 +157,7 @@ class RouterTest extends PHPUnit_Framework_TestCase
 
         $_SERVER['REQUEST_METHOD'] = 'OPTIONS';
         $_SERVER['REQUEST_URI'] = '/';
-        $this->router->route();
+        $this->router->dispatch();
         $this->assertTrue($called);
     }
 
@@ -172,7 +172,7 @@ class RouterTest extends PHPUnit_Framework_TestCase
 
         $_SERVER['REQUEST_METHOD'] = 'HEAD';
         $_SERVER['REQUEST_URI'] = '/';
-        $this->router->route();
+        $this->router->dispatch();
         $this->assertTrue($called);
     }
 
@@ -187,7 +187,7 @@ class RouterTest extends PHPUnit_Framework_TestCase
 
         $_SERVER['REQUEST_METHOD'] = 'GET';
         $_SERVER['REQUEST_URI'] = '/';
-        $this->router->route();
+        $this->router->dispatch();
         $this->assertTrue($called);
     }
 
@@ -202,7 +202,7 @@ class RouterTest extends PHPUnit_Framework_TestCase
 
         $_SERVER['REQUEST_METHOD'] = 'POST';
         $_SERVER['REQUEST_URI'] = '/';
-        $this->router->route();
+        $this->router->dispatch();
         $this->assertTrue($called);
     }
 
@@ -217,7 +217,7 @@ class RouterTest extends PHPUnit_Framework_TestCase
 
         $_SERVER['REQUEST_METHOD'] = 'PUT';
         $_SERVER['REQUEST_URI'] = '/';
-        $this->router->route();
+        $this->router->dispatch();
         $this->assertTrue($called);
     }
 
@@ -232,7 +232,7 @@ class RouterTest extends PHPUnit_Framework_TestCase
 
         $_SERVER['REQUEST_METHOD'] = 'PATCH';
         $_SERVER['REQUEST_URI'] = '/';
-        $this->router->route();
+        $this->router->dispatch();
         $this->assertTrue($called);
     }
 
@@ -247,7 +247,7 @@ class RouterTest extends PHPUnit_Framework_TestCase
 
         $_SERVER['REQUEST_METHOD'] = 'DELETE';
         $_SERVER['REQUEST_URI'] = '/';
-        $this->router->route();
+        $this->router->dispatch();
         $this->assertTrue($called);
     }
 
@@ -269,7 +269,7 @@ class RouterTest extends PHPUnit_Framework_TestCase
 
         $_SERVER['REQUEST_METHOD'] = 'GET';
         $_SERVER['REQUEST_URI'] = '/call-me';
-        $this->router->route();
+        $this->router->dispatch();
         $this->assertFalse($firstCalled);
         $this->assertTrue($secondCalled);
     }
@@ -299,7 +299,7 @@ class RouterTest extends PHPUnit_Framework_TestCase
 
         $_SERVER['REQUEST_METHOD'] = 'POST';
         $_SERVER['REQUEST_URI'] = '/call-me-post';
-        $this->router->route();
+        $this->router->dispatch();
         $this->assertFalse($firstCalled);
         $this->assertTrue($secondCalled);
         $this->assertFalse($thirdCalled);
@@ -337,7 +337,7 @@ class RouterTest extends PHPUnit_Framework_TestCase
 
         $_SERVER['REQUEST_METHOD'] = 'PUT';
         $_SERVER['REQUEST_URI'] = '/does-not-exist';
-        $this->router->route();
+        $this->router->dispatch();
         $this->assertFalse($firstCalled);
         $this->assertFalse($secondCalled);
         $this->assertFalse($thirdCalled);
