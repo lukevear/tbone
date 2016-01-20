@@ -221,6 +221,7 @@ class TBone
 
         if (!isset($this->routes[$_SERVER['REQUEST_METHOD']][strtok($_SERVER['REQUEST_URI'], '?')])) {
             $this->fireEvent(TBoneEvent::ROUTE_NOT_FOUND);
+
             return;
         }
 
