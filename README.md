@@ -52,7 +52,7 @@ $router->post('/contact-us', function() {
 });
 
 // Run the router
-$router->route();
+$router->dispatch();
 ~~~
 
 ### Event System
