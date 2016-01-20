@@ -74,8 +74,8 @@ $router->get('/', function() {
 // Register our 404 page
 $router->addHandler(TBoneEvent::ROUTE_NOT_FOUND, function() {
     http_response_code(404);
-    echo 'Sorry, that page doesn't exist!);
-})
+    echo 'Sorry, that page doesn\'t exist!';
+});
 
 // Run the router
 $router->dispatch();
