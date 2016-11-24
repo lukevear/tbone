@@ -1,11 +1,10 @@
 ## TBone
-=======================================
 
 [![Latest Stable Version](https://poser.pugx.org/lukevear/tbone/v/stable)](https://packagist.org/packages/lukevear/tbone)
 [![Build Status](https://travis-ci.org/lukevear/tbone.svg)](https://travis-ci.org/lukevear/tbone)
 [![Coverage Status](https://coveralls.io/repos/lukevear/tbone/badge.svg?branch=master&service=github)](https://coveralls.io/github/lukevear/tbone?branch=master)
-[![Total Downloads](https://poser.pugx.org/lukevear/tbone/downloads)](https://packagist.org/packages/lukevear/tbone) [![License](https://poser.pugx.org/lukevear/tbone/license)](https://packagist.org/packages/lukevear/tbone)
-[![SensioLabsInsight](https://insight.sensiolabs.com/projects/d31e8152-8f65-4b98-8521-6823077a079d/mini.png)](https://insight.sensiolabs.com/projects/d31e8152-8f65-4b98-8521-6823077a079d)
+[![License](https://poser.pugx.org/lukevear/tbone/license)](https://packagist.org/packages/lukevear/tbone)
+
 
 ## A very simple, very fast PHP router.
 
@@ -15,7 +14,10 @@
 
 > Note: TBone does not support route parameters (such as /customers/{id})
 
-### Easy Installation with Composer
+### When to use TBone
+TBone is designed to be used in in very simple, relatively static PHP applications where your application logic can sit within a set of closures. If you try to use TBone for anything beyond simple sites, you're going to have a bad time. If you're after something more impressive I would suggest [nikic/FastRoute](https://github.com/nikic/FastRoute).
+
+### Installation
 
 ```
 composer require lukevear/tbone
